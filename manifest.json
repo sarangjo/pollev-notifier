@@ -1,13 +1,18 @@
 {
     "description": "Poll Everywhere Notifier",
-    "manifest_version": 1,
+    "manifest_version": 2,
     "name": "PollEv Notifier",
     "version": "1.0",
+    "homepage_url": "https://github.com/sarangjo/pollev-notifier",
+    "icons": {
+        "48": "icons/pollev-48.png"
+    },
+
     "content_scripts": [
         {
-            "matches": ["*://*.pollev.com/?+"],
+            "matches": ["*://pollev.com/*"],
             "js": ["notifier.js"]
         }
     ],
-    "permissions": [ "alarms", "notifications" ]
+    "permissions": [ "notifications" ]
 }
