@@ -1,0 +1,13 @@
+{
+    "description": "Poll Everywhere Notifier",
+    "manifest_version": 1,
+    "name": "PollEv Notifier",
+    "version": "1.0",
+    "content_scripts": [
+        {
+            "matches": ["*://*.pollev.com/?+"],
+            "js": ["notifier.js"]
+        }
+    ],
+    "permissions": [ "alarms", "notifications" ]
+}
