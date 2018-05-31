@@ -1,39 +1,42 @@
-let notif = "NOTIFICATION";
-
-// https://stackoverflow.com/a/44670502/3321184
-function respondToVisibility(element, callback) {
-  var options = {
-    root: document.documentElement
-  };
-
-  var observer = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
-      callback(entry.intersectionRatio > 0);
-    });
-  }, options);
-
-  observer.observe(element);
-}
-
-respondToVisibility(document.getElementsByClassName('lobby')[0], isVisible => {
-  console.log(isVisible);
-  if (isVisible) {
-    notify();
+var interval;
+var observer = function() {
+  var mainContent = document.getElementById('maincontent');
+  if (!mainContent) {
+    return;
   }
-});
+  console.log("found content");
+  clearInterval(interval);
+
+  let notif = "NOTIFICATION";
+
+  var lobby = document.getElementsByClassName('lobby')[0];
+
+  var x = new MutationObserver(function (e) {
+    if (e.length &&
+      e[0].removedNodes.length &&
+      e[0].removedNodes[0].classList.contains('lobby')) {
+      alert("notify");
+      // notify();
+    }
+  });
+
+  x.observe(mainContent, { childList: true });
+};
 
 function notify() {
-  browser.notifications.create(notif, {
+  chrome.notifications.create(notif, {
     // TODO add sound?
     "type": "basic",
     "title": "Notif",
     "message": "Message"
   });
 
-  browser.browserAction.onClicked.addListener(() => {
-    let clearing = browser.notifications.clear(notif);
+  chrome.browserAction.onClicked.addListener(() => {
+    let clearing = chrome.notifications.clear(notif);
     clearing.then(() => {
       console.log("cleared notif");
     });
   });
 }
+
+interval = setInterval(observer, 300);
