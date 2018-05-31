@@ -4,10 +4,7 @@ var observer = function() {
   if (!mainContent) {
     return;
   }
-  console.log("found content");
   clearInterval(interval);
-
-  let notif = "NOTIFICATION";
 
   var lobby = document.getElementsByClassName('lobby')[0];
 
@@ -15,8 +12,8 @@ var observer = function() {
     if (e.length &&
       e[0].removedNodes.length &&
       e[0].removedNodes[0].classList.contains('lobby')) {
-      alert("notify");
-      // notify();
+      // alert("notify");
+      notify();
     }
   });
 
@@ -24,15 +21,19 @@ var observer = function() {
 };
 
 function notify() {
-  chrome.notifications.create(notif, {
+  var notif = "NOTIFICATION";
+
+  var browser = browser || chrome;
+
+  browser.notifications.create(notif, {
     // TODO add sound?
     "type": "basic",
     "title": "Notif",
     "message": "Message"
   });
 
-  chrome.browserAction.onClicked.addListener(() => {
-    let clearing = chrome.notifications.clear(notif);
+  browser.browserAction.onClicked.addListener(() => {
+    var clearing = browser.notifications.clear(notif);
     clearing.then(() => {
       console.log("cleared notif");
     });
